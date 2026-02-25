@@ -6,13 +6,12 @@ import { usePathname } from "next/navigation";
 
 const Header = () => {
     const pathname = usePathname();
-    console.log(pathname);
 
     return (
         <header className="border-b">
             <div className="py-2 md:py-4 px-2 md:px-4 mx-auto flex items-center justify-between">
                 <Link href="/">
-                    <Image src="logo.svg" alt="cryptoPulse logo" width={40} height={40} />
+                    <Image src="/logo.svg" alt="cryptoPulse logo" width={40} height={40} />
                 </Link>
 
                 <nav className="flex items-center gap-2 md:gap-4 font-mediu">
