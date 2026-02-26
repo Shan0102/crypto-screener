@@ -1,6 +1,14 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@theme inline {
+    --color-dark: var(--dark);
+}
+
+.dark {
+    --dark: #1b1b1b;
+}
+
 @layer base {
     * {
         margin: 0;
@@ -9,7 +17,7 @@
     }
 
     body {
-        @apply bg-slate-700;
-        @apply text-white
+        @apply bg-dark;
+        @apply text-white;
     }
 }
