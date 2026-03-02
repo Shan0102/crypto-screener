@@ -12,7 +12,7 @@ const Header = () => {
             <div className="py-2 md:py-4 px-2 md:px-4 max-w-360 mx-auto">
                 <div className="flex items-center justify-between">
                     <Link href="/">
-                        <Image src="/logo.svg" alt="cryptoPulse logo" width={48} height={48} />
+                        <Image src="/logo.svg" alt="cryptoPulse logo" width={36} height={36} />
                     </Link>
 
                     <nav className="flex items-center gap-2 md:gap-4 font-mediu">
