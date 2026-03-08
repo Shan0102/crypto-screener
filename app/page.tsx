@@ -1,4 +1,5 @@
-import CoinTable from "@/components/CoinTable";
+import DataTable from "@/components/DataTable";
+import { TrendingUp, TrendingDown } from "lucide-react";
 import Image from "next/image";
 
 interface PageProps {}
@@ -18,26 +19,34 @@ const coinDataList: CoinData[] = [
         price: "$89,000",
         is_24h_change_positive: false,
     },
+];
+
+const dataTableColumn: DataTableColumn<CoinData>[] = [
     {
-        name: "Bitcoin",
-        image_url: "https://assets.coingecko.com/coins/images/1/large/bitcoin.png",
-        "24h_change": "1,20%",
-        price: "$89,000",
-        is_24h_change_positive: true,
+        cellName: "Name",
+        cellData: (coinData) => (
+            <div className="flex gap-2">
+                <Image alt={coinData.name} src={coinData.image_url} width={24} height={24} />
+                <span>{coinData.name}</span>
+            </div>
+        ),
     },
     {
-        name: "Bitcoin",
-        image_url: "https://assets.coingecko.com/coins/images/1/large/bitcoin.png",
-        "24h_change": "1,20%",
-        price: "$89,000",
-        is_24h_change_positive: true,
+        cellName: "24h change",
+        cellData: (coinData) => (
+            <div
+                className={`flex gap-2 ${
+                    coinData.is_24h_change_positive ? "text-green-600" : "text-red-600"
+                }`}
+            >
+                {coinData.is_24h_change_positive ? <TrendingUp /> : <TrendingDown />}
+                {coinData["24h_change"]}
+            </div>
+        ),
     },
     {
-        name: "Bitcoin",
-        image_url: "https://assets.coingecko.com/coins/images/1/large/bitcoin.png",
-        "24h_change": "1,20%",
-        price: "$89,000",
-        is_24h_change_positive: true,
+        cellName: "Price",
+        cellData: (coinData) => coinData.price,
     },
 ];
 
@@ -64,7 +73,7 @@ const Page = ({}: PageProps) => {
                             </div>
                         </div>
                     </div>
-                    <CoinTable coinDataList={coinDataList} />
+                    <DataTable columnDataList={dataTableColumn} rowDataList={coinDataList} />
                 </section>
                 <section>
                     <p>Categories</p>
