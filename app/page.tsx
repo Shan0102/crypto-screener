@@ -5,13 +5,17 @@ import { Suspense } from "react";
 const Page = async () => {
     return (
         <main className="py-2 md:py-4 px-2 md:px-4 max-w-360 mx-auto">
-            <div className="flex flex-col lg:flex-row gap-2 md:gap-4">
-                <section className="space-y-2 md:space-y-4">
+            <div className="">
+                <section className="w-full flex flex-col lg:flex-row gap-2 md:gap-4">
                     <Suspense fallback={<div>Loading Coin Overview</div>}>
-                        <CoinOverview />
+                        <div className="w-full lg:w-1/2">
+                            <CoinOverview />
+                        </div>
                     </Suspense>
                     <Suspense fallback={<div>Loading Trending Coins</div>}>
-                        <TrendingCoins />
+                        <div className="w-full lg:w-1/2">
+                            <TrendingCoins />
+                        </div>
                     </Suspense>
                 </section>
                 <section>

@@ -1,3 +1,5 @@
+import { Time } from "lightweight-charts";
+
 interface CoinDetailsData {
     id: string;
     symbol: string;
@@ -36,20 +38,21 @@ interface TrendingCoin {
     };
 }
 
-interface CoinData {
-    name: string;
-    image_url: string;
-    is_24h_change_positive: boolean;
-    "24h_change": string;
-    price: string;
-}
+type OhlcData = [Time, number, number, number, number][];
+type CandleStick = {
+    time: Time;
+    open: number;
+    high: number;
+    low: number;
+    close: number;
+};
 
 interface DataTableColumn<T> {
     cellName: string;
     cellData: (coin: T) => React.ReactNode;
 }
 
-type QueryParams = Record<string, string>;
+type QueryParams = Record<string, string | number>;
 
 interface CoinGeckoErrorBody {
     error: string;

@@ -3,6 +3,7 @@ import DataTable from "../DataTable";
 import Image from "next/image";
 import fetcher from "@/lib/coinGecko.actions";
 import { formatCurrency } from "@/lib/utils";
+import { DataTableColumn, TrendingCoin } from "@/type";
 
 const columnDataList: DataTableColumn<TrendingCoin>[] = [
     {
@@ -47,7 +48,6 @@ const TrendingCoins = async () => {
             "search/trending",
             undefined,
             300,
-            true,
         );
 
         return (

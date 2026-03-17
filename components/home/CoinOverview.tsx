@@ -2,21 +2,28 @@ interface CoinOverviewProps {}
 import fetcher from "@/lib/coinGecko.actions";
 import { formatCurrency } from "@/lib/utils";
 import Image from "next/image";
+import CandleStickChart from "./candleStickChart";
+import { CoinDetailsData, OhlcData } from "@/type";
 
 const CoinOverview = async ({}: CoinOverviewProps) => {
     try {
-        const coin = await fetcher<CoinDetailsData>(
-            "coins/bitcoin",
-            {
+        const [coin, coinOHLCData] = await Promise.all([
+            await fetcher<CoinDetailsData>("coins/bitcoin", {
                 dex_pair_format: "symbol",
-            },
-            60,
-            true,
-        );
+            }),
+            await fetcher<OhlcData>("coins/bitcoin/ohlc", {
+                vs_currency: "usd",
+                days: 1,
+                interval: "daily",
+                precision: "full",
+            }),
+        ]);
+
+        console.log(coinOHLCData);
 
         return (
-            <div className="p-2 md:p-4 px-2 bg-gray-800/70 rounded-2xl">
-                <div className="flex gap-2">
+            <div className="p-2 md:p-4 bg-gray-800 rounded-2xl">
+                <div className="flex gap-2 mb-4">
                     <div>
                         <Image alt={coin.name} src={coin.image.large} width={48} height={48} />
                     </div>
@@ -29,6 +36,11 @@ const CoinOverview = async ({}: CoinOverviewProps) => {
                         </h1>
                     </div>
                 </div>
+                <CandleStickChart
+                    height={360}
+                    initialPeriod="daily"
+                    initialOhlcData={coinOHLCData}
+                />
             </div>
         );
     } catch (error) {

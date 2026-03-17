@@ -1,5 +1,6 @@
 "use server";
 
+import { CoinGeckoErrorBody, QueryParams } from "@/type";
 import queryString from "query-string";
 
 const BASE_URL = process.env.COINGECKO_BASE_URL;
@@ -10,7 +11,7 @@ async function fetcher<T>(
     endpoint: string,
     params?: QueryParams,
     revalidate = 60,
-    demo?: boolean,
+    demo: boolean = false,
 ): Promise<T> {
     if (!BASE_URL) throw new Error("Could not get base url");
     if (!DEMO_URL) throw new Error("Could not get demo url");
@@ -27,18 +28,22 @@ async function fetcher<T>(
             { skipEmptyString: true, skipNull: true },
         );
 
-        const headers = {
-            "x-cg-demo-api-key": API_KEY,
+        const headers = new Headers({
             "Content-Type": "application/json",
-        } as Record<string, string>;
+        });
 
-        if (demo) headers["x-cg-demo-api-key"] = API_KEY;
-        else headers["x-cg-pro-api-key"] = API_KEY;
+        if (demo) headers.append("x-cg-demo-api-key", API_KEY);
+        else headers.append("x-cg-pro-api-key", API_KEY);
 
-        const response = await fetch(url, {
+        const request: Request = new Request(url, {
             headers,
             next: { revalidate },
         });
+        console.log(request);
+
+        const response = await fetch(request);
+
+        console.log(response);
 
         if (!response.ok) {
             const errorBody: CoinGeckoErrorBody = await response.json().catch(() => {});

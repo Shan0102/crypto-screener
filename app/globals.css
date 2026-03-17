@@ -20,4 +20,8 @@
         @apply bg-dark;
         @apply text-white;
     }
+
+    button:hover {
+        background-color: var(--hover-color);
+    }
 }
