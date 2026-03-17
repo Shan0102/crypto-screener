@@ -20,6 +20,22 @@ interface CoinDetailsData {
     };
 }
 
+interface TrendingCoin {
+    item: {
+        id: string;
+        name: string;
+        symbol: string;
+        small: string;
+        large: string;
+        data: {
+            price: number;
+            price_change_percentage_24h: {
+                usd: number;
+            };
+        };
+    };
+}
+
 interface CoinData {
     name: string;
     image_url: string;
