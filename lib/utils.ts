@@ -1,5 +1,6 @@
 import { CandleStick, OhlcData } from "@/type";
 import { clsx, type ClassValue } from "clsx";
+import { Time } from "lightweight-charts";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -15,7 +16,7 @@ export function formatCurrency(value: number, locale: string = "en-US", currency
 
 export function convertOhlcData(ohlcData: OhlcData): CandleStick[] {
     return ohlcData.map((data) => ({
-        time: data[0],
+        time: Math.floor(data[0] / 1000) as Time,
         open: data[1],
         high: data[2],
         low: data[3],

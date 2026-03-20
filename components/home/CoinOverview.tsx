@@ -14,12 +14,9 @@ const CoinOverview = async ({}: CoinOverviewProps) => {
             await fetcher<OhlcData>("coins/bitcoin/ohlc", {
                 vs_currency: "usd",
                 days: 1,
-                interval: "daily",
                 precision: "full",
             }),
         ]);
-
-        console.log(coinOHLCData);
 
         return (
             <div className="p-2 md:p-4 bg-gray-800 rounded-2xl">

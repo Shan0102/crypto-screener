@@ -3,26 +3,19 @@
 import { CoinGeckoErrorBody, QueryParams } from "@/type";
 import queryString from "query-string";
 
+// const DEMO_URL = process.env.COINGECKO_DEMO_URL;
 const BASE_URL = process.env.COINGECKO_BASE_URL;
-const DEMO_URL = process.env.COINGECKO_DEMO_URL;
 const API_KEY = process.env.COINGECKO_API_KEY;
 
-async function fetcher<T>(
-    endpoint: string,
-    params?: QueryParams,
-    revalidate = 60,
-    demo: boolean = false,
-): Promise<T> {
-    if (!BASE_URL) throw new Error("Could not get base url");
-    if (!DEMO_URL) throw new Error("Could not get demo url");
-    if (!API_KEY) throw new Error("Could not get api key");
+async function fetcher<T>(endpoint: string, params?: QueryParams, revalidate = 60): Promise<T> {
+    // if (!DEMO_URL) throw new Error("Could not get demo url");
 
     try {
-        const baseURL = demo ? DEMO_URL : BASE_URL;
-
+        if (!BASE_URL) throw new Error("Could not get base url");
+        if (!API_KEY) throw new Error("Could not get api key");
         const url = queryString.stringifyUrl(
             {
-                url: `${baseURL}/${endpoint}`,
+                url: `${BASE_URL}/${endpoint}`,
                 query: params,
             },
             { skipEmptyString: true, skipNull: true },
@@ -30,25 +23,22 @@ async function fetcher<T>(
 
         const headers = new Headers({
             "Content-Type": "application/json",
+            "x-cg-demo-api-key": API_KEY,
         });
-
-        if (demo) headers.append("x-cg-demo-api-key", API_KEY);
-        else headers.append("x-cg-pro-api-key", API_KEY);
 
         const request: Request = new Request(url, {
             headers,
             next: { revalidate },
         });
-        console.log(request);
-
         const response = await fetch(request);
-
-        console.log(response);
 
         if (!response.ok) {
             const errorBody: CoinGeckoErrorBody = await response.json().catch(() => {});
+            console.log(request);
+            console.log(response);
+            console.log(errorBody);
             throw new Error(
-                `API Error: ${response.status}: ${errorBody.error || response.statusText}`,
+                `API Error: ${response.status}: ${errorBody.status?.error_message || response.statusText}`,
             );
         }
 

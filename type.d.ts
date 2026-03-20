@@ -38,7 +38,7 @@ interface TrendingCoin {
     };
 }
 
-type OhlcData = [Time, number, number, number, number][];
+type OhlcData = [number, number, number, number, number][];
 type CandleStick = {
     time: Time;
     open: number;
@@ -55,5 +55,9 @@ interface DataTableColumn<T> {
 type QueryParams = Record<string, string | number>;
 
 interface CoinGeckoErrorBody {
-    error: string;
+    timestamp: string;
+    error_code: number;
+    status?: {
+        error_message: string;
+    };
 }

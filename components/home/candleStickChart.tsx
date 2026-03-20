@@ -32,11 +32,14 @@ const CandleStickChart = ({ initialPeriod, height, initialOhlcData }: CandleStic
         const main = async () => {
             const newOhlcData = await fetcher<OhlcData>("coins/bitcoin/ohlc", {
                 vs_currency: "usd",
-                days: 1,
-                interval: "daily",
+                days: period,
                 precision: "full",
             });
+
+            setOhclData(newOhlcData);
         };
+
+        main();
     }, [period]);
 
     useEffect(() => {
@@ -57,7 +60,31 @@ const CandleStickChart = ({ initialPeriod, height, initialOhlcData }: CandleStic
 
         const series = chart.addSeries(CandlestickSeries);
         series.setData(convertOhlcData(ohclData));
+
+        chartRef.current = chart;
+        candleSeriesRef.current = series;
+        chart.timeScale().fitContent();
+
+        const observer = new ResizeObserver((entries) => {
+            if (!entries.length) return;
+            chart.applyOptions({ width: entries[0].contentRect.width });
+        });
+        observer.observe(container);
+
+        return () => {
+            observer.disconnect();
+            chart.remove();
+            chartRef.current = null;
+            candleSeriesRef.current = null;
+        };
     }, [height]);
+
+    useEffect(() => {
+        if (!candleSeriesRef.current) return;
+
+        const convertedOhlcData = convertOhlcData(ohclData);
+        candleSeriesRef.current.setData(convertedOhlcData);
+    }, [ohclData]);
 
     return (
         <div>
@@ -66,7 +93,7 @@ const CandleStickChart = ({ initialPeriod, height, initialOhlcData }: CandleStic
                 <div className="flex gap-2">
                     {PERIOD_BUTTONS.map((periodButton) => (
                         <button
-                            key={periodButton.value}
+                            key={periodButton.name}
                             className={`rounded-lg p-2 cursor-pointer hover:bg-red-500/50 ${period === periodButton.value ? "bg-red-500!" : ""}`}
                             disabled={isLoading}
                             onClick={() => setPeriod(periodButton.value)}
