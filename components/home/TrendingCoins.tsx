@@ -11,7 +11,7 @@ const columnDataList: DataTableColumn<TrendingCoin>[] = [
         cellData: (coinData) => (
             <div className="flex gap-2">
                 <Image alt={coinData.item.name} src={coinData.item.small} width={24} height={24} />
-                <span>{coinData.item.name}</span>
+                <span className="text-nowrap">{coinData.item.name}</span>
             </div>
         ),
     },
@@ -52,7 +52,11 @@ const TrendingCoins = async () => {
 
         return (
             <div>
-                <DataTable columnDataList={columnDataList} rowDataList={trendingCoins.coins} />
+                <DataTable
+                    columnDataList={columnDataList}
+                    rowDataList={trendingCoins.coins.slice(0, 7)}
+                    tableTitle="Trending Coins"
+                />
             </div>
         );
     } catch (error) {

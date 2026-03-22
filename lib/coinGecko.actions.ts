@@ -3,13 +3,10 @@
 import { CoinGeckoErrorBody, QueryParams } from "@/type";
 import queryString from "query-string";
 
-// const DEMO_URL = process.env.COINGECKO_DEMO_URL;
 const BASE_URL = process.env.COINGECKO_BASE_URL;
 const API_KEY = process.env.COINGECKO_API_KEY;
 
 async function fetcher<T>(endpoint: string, params?: QueryParams, revalidate = 60): Promise<T> {
-    // if (!DEMO_URL) throw new Error("Could not get demo url");
-
     try {
         if (!BASE_URL) throw new Error("Could not get base url");
         if (!API_KEY) throw new Error("Could not get api key");

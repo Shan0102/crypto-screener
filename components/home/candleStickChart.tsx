@@ -20,7 +20,7 @@ interface CandleStickChartProps {
 }
 
 const CandleStickChart = ({ initialPeriod, height, initialOhlcData }: CandleStickChartProps) => {
-    const [isLoading, setIsLoading] = useState(false);
+    const [isPending, setIsPending] = useState(false);
     const [period, setPeriod] = useState(initialPeriod);
     const [ohclData, setOhclData] = useState(initialOhlcData);
 
@@ -29,6 +29,8 @@ const CandleStickChart = ({ initialPeriod, height, initialOhlcData }: CandleStic
     const candleSeriesRef = useRef<ISeriesApi<"Candlestick"> | null>(null);
 
     useEffect(() => {
+        setIsPending(true);
+
         const main = async () => {
             const newOhlcData = await fetcher<OhlcData>("coins/bitcoin/ohlc", {
                 vs_currency: "usd",
@@ -84,6 +86,7 @@ const CandleStickChart = ({ initialPeriod, height, initialOhlcData }: CandleStic
 
         const convertedOhlcData = convertOhlcData(ohclData);
         candleSeriesRef.current.setData(convertedOhlcData);
+        setIsPending(false);
     }, [ohclData]);
 
     return (
@@ -95,7 +98,7 @@ const CandleStickChart = ({ initialPeriod, height, initialOhlcData }: CandleStic
                         <button
                             key={periodButton.name}
                             className={`rounded-lg p-2 cursor-pointer hover:bg-red-500/50 ${period === periodButton.value ? "bg-red-500!" : ""}`}
-                            disabled={isLoading}
+                            disabled={isPending}
                             onClick={() => setPeriod(periodButton.value)}
                         >
                             {periodButton.label}

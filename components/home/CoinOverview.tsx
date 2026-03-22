@@ -4,14 +4,15 @@ import { formatCurrency } from "@/lib/utils";
 import Image from "next/image";
 import CandleStickChart from "./candleStickChart";
 import { CoinDetailsData, OhlcData } from "@/type";
+import { PERIOD_BUTTONS } from "@/lib/constants";
 
 const CoinOverview = async ({}: CoinOverviewProps) => {
     try {
         const [coin, coinOHLCData] = await Promise.all([
-            await fetcher<CoinDetailsData>("coins/bitcoin", {
+            fetcher<CoinDetailsData>("coins/bitcoin", {
                 dex_pair_format: "symbol",
             }),
-            await fetcher<OhlcData>("coins/bitcoin/ohlc", {
+            fetcher<OhlcData>("coins/bitcoin/ohlc", {
                 vs_currency: "usd",
                 days: 1,
                 precision: "full",
@@ -35,7 +36,7 @@ const CoinOverview = async ({}: CoinOverviewProps) => {
                 </div>
                 <CandleStickChart
                     height={360}
-                    initialPeriod="daily"
+                    initialPeriod={PERIOD_BUTTONS[0].value}
                     initialOhlcData={coinOHLCData}
                 />
             </div>

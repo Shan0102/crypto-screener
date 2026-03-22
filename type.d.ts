@@ -22,6 +22,16 @@ interface CoinDetailsData {
     };
 }
 
+interface CategorieDetailsData {
+    id: string;
+    name: string;
+    market_cap: number;
+    market_cap_change_24h: number;
+    top_3_coins_id: [string, string, string];
+    top_3_coins: [string, string, string]; // small images
+    volume_24h: number;
+}
+
 interface TrendingCoin {
     item: {
         id: string;
